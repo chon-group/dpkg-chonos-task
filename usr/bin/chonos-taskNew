@@ -1,0 +1,3 @@
+#! /bin/sh
+# Maintaining compatibility with ChonIDE version (<1.0.0)
+/usr/bin/chonos-task -t $1

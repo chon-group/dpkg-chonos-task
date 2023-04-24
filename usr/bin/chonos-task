@@ -1,0 +1,66 @@
+#! /bin/sh
+EmbedMAS_TMP=/tmp/.embedMAS
+mkdir -p $EmbedMAS_TMP
+EmbedMAS_LOGFILE=$EmbedMAS_TMP/embeddedMAS.log
+LOCK=$EmbedMAS_TMP/task.conf
+
+while getopts t:-: flag 
+    do
+    case "${flag}" in
+        t) task=${OPTARG};;  
+        -) opt=${OPTARG};;
+    esac
+done
+
+taskMaster(){
+	taskExec=`cat $LOCK`
+	if [ $taskExec -eq 1 ]; then
+		echo -n "[chonos-task] New task: " >> $EmbedMAS_LOGFILE
+		cat $EmbedMAS_TMP/taskExec.sh >> $EmbedMAS_LOGFILE
+		echo 0 > $LOCK
+		$EmbedMAS_TMP/taskExec.sh
+	else
+		sleep 10
+	fi
+}
+
+if [ "$task" != "" ]; then
+    echo $task > $EmbedMAS_TMP/taskExec.sh
+    chmod +x $EmbedMAS_TMP/taskExec.sh
+    echo 1 > $LOCK
+    exit 0
+fi
+
+ls $EmbedMAS_TMP/taskMaster.pid 2> /dev/null >/dev/null
+STATUS=$?
+if [ "$opt" = "help" ]; then
+	man chonos-task
+    exit 0
+elif [ "$opt" = "start" ]; then
+	echo "[chonos-task] Starting ChonOS Task Manager" >> $EmbedMAS_LOGFILE
+	if [ $STATUS -eq 0 ] 
+	then
+		echo -n "Task Manager is already running... " 
+		cat $EmbedMAS_TMP/taskMaster.pid 
+		exit 0
+	else
+		echo $$ > $EmbedMAS_TMP/taskMaster.pid
+		echo 0 > $LOCK
+		while true
+		do
+			taskMaster
+		done
+	fi
+elif [ "$opt" = "stop" ]; then
+    echo "[chonos-task] Stopping ChonOS Task Manager" >> $EmbedMAS_LOGFILE
+	if [ $STATUS -eq 0 ] 
+	then
+		kill `cat $EmbedMAS_TMP/taskMaster.pid`
+		rm $EmbedMAS_TMP/taskMaster.pid
+	else
+		pkill chonos-task
+	fi
+    exit 0
+fi
+
+/usr/bin/chonos-task --help

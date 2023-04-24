@@ -1,0 +1,9 @@
+#! /bin/sh
+
+# Maintaining compatibility with ChonIDE version (<1.0.0)
+if [ "$1" = "stop" ]
+then
+	/usr/bin/chonos-task --stop
+else
+	/usr/bin/chonos-task --start
+fi

@@ -1,0 +1,14 @@
+Package: chonos-task
+Version: 1.0.0
+Priority:
+Architecture: all
+Essential:
+Depends: chonos-log (>= 1.0.0)
+Pre-depends:
+Suggests:
+Installed-Size:
+Maintainer: chon@grupo.cefet-rj.br
+Conflicts:
+Replaces:
+Provides:
+Description: ChonOS Task Manager Service 
