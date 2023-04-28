@@ -37,10 +37,10 @@ if [ "$opt" = "help" ]; then
 	man chonos-task
     exit 0
 elif [ "$opt" = "start" ]; then
-	echo "[chonos-task] Starting ChonOS Task Manager" >> $EmbedMAS_LOGFILE
+	echo "[chonos-task] Starting the ChonOS Task Manager." >> $EmbedMAS_LOGFILE
 	if [ $STATUS -eq 0 ] 
 	then
-		echo -n "Task Manager is already running... " 
+		echo -n "Task Manager is already running! " 
 		cat $EmbedMAS_TMP/taskMaster.pid 
 		exit 0
 	else
