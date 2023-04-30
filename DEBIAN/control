@@ -1,10 +1,10 @@
 Package: chonos-task
-Version: 1.0.0
+Version: 1.1.0
 Priority:
 Architecture: all
 Essential:
 Depends: chonos-log (>= 1.0.0)
-Pre-depends:
+Pre-depends: inotify-tools
 Suggests:
 Installed-Size:
 Maintainer: chon@grupo.cefet-rj.br

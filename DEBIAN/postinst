@@ -1,6 +1,6 @@
 #!/bin/bash
 cat /etc/rc.local | grep -v "exit 0" | grep -v "chonos-taskMaster" > /tmp/rc.local
-#echo "/usr/bin/chonos-taskMaster &" >> /tmp/rc.local
+
 echo "exit 0" >> /tmp/rc.local
 cat /tmp/rc.local > /etc/rc.local
 

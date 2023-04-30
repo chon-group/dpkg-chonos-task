@@ -3,6 +3,7 @@ EmbedMAS_TMP=/tmp/.embedMAS
 mkdir -p $EmbedMAS_TMP
 EmbedMAS_LOGFILE=$EmbedMAS_TMP/embeddedMAS.log
 LOCK=$EmbedMAS_TMP/task.conf
+myPID=$$
 
 while getopts t:-: flag 
     do
@@ -13,22 +14,26 @@ while getopts t:-: flag
 done
 
 taskMaster(){
-	taskExec=`cat $LOCK`
-	if [ $taskExec -eq 1 ]; then
-		echo -n "[chonos-task] New task: " >> $EmbedMAS_LOGFILE
-		cat $EmbedMAS_TMP/taskExec.sh >> $EmbedMAS_LOGFILE
-		echo 0 > $LOCK
-		$EmbedMAS_TMP/taskExec.sh
-	else
-		sleep 10
+	/usr/bin/inotifywait -q -e modify $EmbedMAS_TMP/taskExec.sh								# waiting for a new task
+	echo "[chonos-task] New task: $(cat $EmbedMAS_TMP/taskExec.sh)" >> $EmbedMAS_LOGFILE	# log the task
+	$EmbedMAS_TMP/taskExec.sh																# execute the task
+	echo 0 > $LOCK																			# unlock
+}
+
+lock(){	
+	if [ $(cat $LOCK) -eq 0 ]
+	then
+		echo $myPID > $LOCK
 	fi
 }
 
 if [ "$task" != "" ]; then
-    echo $task > $EmbedMAS_TMP/taskExec.sh
-    chmod +x $EmbedMAS_TMP/taskExec.sh
-    echo 1 > $LOCK
-    exit 0
+	while [ "$(cat $LOCK)" != "$myPID" ]
+	do
+		lock
+	done	
+	echo $task > $EmbedMAS_TMP/taskExec.sh
+	exit 0
 fi
 
 ls $EmbedMAS_TMP/taskMaster.pid 2> /dev/null >/dev/null
@@ -37,14 +42,16 @@ if [ "$opt" = "help" ]; then
 	man chonos-task
     exit 0
 elif [ "$opt" = "start" ]; then
-	echo "[chonos-task] Starting the ChonOS Task Manager." >> $EmbedMAS_LOGFILE
+	echo "[chonos-task] Starting the ChonOS Task Manager" >> $EmbedMAS_LOGFILE
 	if [ $STATUS -eq 0 ] 
 	then
-		echo -n "Task Manager is already running! " 
+		echo -n "Task Manager is already running!" 
 		cat $EmbedMAS_TMP/taskMaster.pid 
 		exit 0
 	else
 		echo $$ > $EmbedMAS_TMP/taskMaster.pid
+		touch $EmbedMAS_TMP/taskExec.sh
+		chmod +x $EmbedMAS_TMP/taskExec.sh
 		echo 0 > $LOCK
 		while true
 		do
@@ -57,6 +64,7 @@ elif [ "$opt" = "stop" ]; then
 	then
 		kill `cat $EmbedMAS_TMP/taskMaster.pid`
 		rm $EmbedMAS_TMP/taskMaster.pid
+		rm $EmbedMAS_TMP/taskExec.sh
 	else
 		pkill chonos-task
 	fi
