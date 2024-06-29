@@ -1,0 +1,4 @@
+#!/bin/bash
+systemctl stop chonos-task.service
+systemctl disable chonos-task.service
+systemctl daemon-reload
