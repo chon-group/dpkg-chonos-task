@@ -1,8 +1,8 @@
 # ChonOS Task Manager
 
-|![chonos-task]()|
+|![chonos-task](https://github.com/chon-group/dpkg-chonos-task/assets/32855001/d8a78a21-8fa8-4615-a8da-4f1981670ba6)|
 |:--:|
-|ChonOS Task Manager implements a remote command scheduler|
+|ChonOS Task Manager implements a remote command scheduler.|
 
 ## How to Install?
 1) In a terminal run the commands below:
