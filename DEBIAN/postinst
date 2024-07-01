@@ -2,6 +2,8 @@
 gzip -f /usr/local/man/man1/chonos-task.1
 mandb
 
-systemctl daemon-reload
 systemctl enable chonos-task.service
-systemctl start chonos-task.service
+if [ -d /run/systemd/system ]; then
+    systemctl daemon-reload
+    systemctl start chonos-task.service
+fi
