@@ -1,9 +1,9 @@
 Package: chonos-task
-Version: 1.1.2
+Version: 1.2.0
 Priority:
 Architecture: all
 Essential:
-Depends: chonos-log (>= 1.5.5)
+Depends: chonos-log (>= 25.11.19)
 Pre-depends: inotify-tools
 Suggests:
 Installed-Size:
