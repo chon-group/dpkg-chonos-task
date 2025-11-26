@@ -1,14 +1,15 @@
 Package: chonos-task
-Version: 1.2.0
+Version: 25.11.26
 Priority:
 Architecture: all
 Essential:
 Depends: chonos-log (>= 25.11.19)
 Pre-depends: inotify-tools
 Suggests:
-Installed-Size:
-Maintainer: chon@grupo.cefet-rj.br
+Installed-Size: 60
+Maintainer: Nilson Lazarin <chon@grupo.cefet-rj.br>
+Homepage: https://github.com/chon-group/dpkg-chonos-task
 Conflicts:
 Replaces:
 Provides:
-Description: ChonOS Task Manager Service 
+Description: ChonOS Task Manager Service implements a remote command scheduler.

@@ -50,11 +50,13 @@ case "$ACTION" in
     ;;
 
     stop)
+        chonos-log -e "[chonos-task] Stopping $SERVICE ..."
         systemctl stop "$SERVICE"
         exit $?
     ;;
 
     restart)
+        chonos-log -e "[chonos-task] Stopping $SERVICE ..."
         systemctl stop "$SERVICE"
         sleep "$SLEEP_BETWEEN"
         tryStartService "$SERVICE"
